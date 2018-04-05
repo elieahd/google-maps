@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Put markers</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<style>
+			html, body {
+				height: 100%;
+				margin: 0;
+				padding: 0;
+			}
+			#map {
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="map"></div>
+		<div>
+			<button onclick="reset()">Reset</button>
+			<button onclick="save()">Save</button>
+		</div>
+
+		<script>
+			var latLngs = [];
+			var markers = [];
+			var map;
+
+			function reset() {
+				// clearing markers
+				for (var i = 0; i < markers.length; i++) {
+			    	markers[i].setMap(null);
+			  	} 
+				latLngs = [];
+			}
+
+			function save(){
+				for (var i = 0; i < latLngs.length; i++) {
+			    	console.log(latLngs[i].lat() + ' - ' + latLngs[i].lng());
+			  	} 
+			}
+
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 5,
+					center: {lat: 46.2276, lng: 2.2137 }
+				});
+
+				map.addListener('click', function(e) {
+					placeMarkerAndPanTo(e.latLng, map);
+				});
+
+			}
+
+			function placeMarkerAndPanTo(latLng, map) {
+				var marker = new google.maps.Marker({
+					position: latLng,
+					map: map,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+				});
+				markers.push(marker);
+				latLngs.push(latLng);	
+			}
+		</script>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_OWN_KEY&signed_in=true&callback=initMap" async defer></script>
+	</body>
+</html>
