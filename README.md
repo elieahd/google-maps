@@ -1,4 +1,4 @@
-# google-maps
+# Google maps
 Multiple useful functions for a google map in html using javascript.
 
 ## Setup
@@ -17,3 +17,9 @@ You can get your own key by following this [link](https://developers.google.com/
 
 Check code [here](src/put-multiple-marker.html)
 
+### Displaying multiple markers in a map
+<p align="center">
+  <img src="screenshots/displaying_multiple_markers.JPG">
+</p>
+
+Check code [here](src/display-multiple-markers.html)
