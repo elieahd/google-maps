@@ -36,4 +36,4 @@ Check code [here](src/draw-line-between-2-points.html)
   <img src="screenshots/displaying_line_between_2_markers.JPG">
 </p>
 
-Check code [here](src/display-line-between-2-points.html)]
+Check code [here](src/display-line-between-2-points.html)
