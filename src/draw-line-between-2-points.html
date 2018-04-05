@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Draw line between 2 points</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<style>
+			html, body {
+				height: 75%;
+				margin: 0;
+				padding: 0;
+			}
+			#map {
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info" style="text-align: center">
+			<h1>Draw line between 2 points</h1>
+			<h3>Right Click to select the first point and Left click to select the second point</h3>
+		</div>
+		<div id="map"></div>
+		<div id="footer" style="text-align:center; margin-top:20px">
+			<button onclick="reset()">reset</button>
+			<button onclick="save()">save</button>
+			<br/>
+			<p id="starting-txt"></p>
+			<p id="end-txt"></p>
+			<p id="error-txt"></p> 
+		</div>
+
+		<script>
+			var latLngEnd = null;
+			var latLngStart = null;
+			var map;
+			var markers = [];
+			var lines = [];
+
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 5,
+					center: {lat: 46.2276, lng: 2.2137}
+				});
+
+				map.addListener('rightclick', function(e) {
+					placeMarkerAndPanTo(e.latLng, map, 'right');
+				});
+
+				map.addListener('click', function(e) {
+					placeMarkerAndPanTo(e.latLng, map, 'left');
+				});
+			}
+			
+			function clearMarkers() {
+				for (var i = 0; i < markers.length; i++) {
+					markers[i].setMap(null);
+				}
+				markers =[]
+			}
+
+			function placeMarkerAndPanTo(latLng, map, eventMouse) {
+
+				clearMarkers();
+
+				if(eventMouse == 'right'){
+					latLngEnd = latLng;
+				}
+				
+				if(eventMouse == 'left'){
+					latLngStart = latLng;
+				}
+
+				if(latLngEnd!=null){
+					var marker = new google.maps.Marker({
+						position: latLngEnd,
+						map: map,
+						icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+					});	
+					markers.push(marker);
+				}
+
+				if(latLngStart!=null){
+					var marker = new google.maps.Marker({
+						position: latLngStart,
+						map: map,
+						icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+					});	
+					markers.push(marker);
+				}
+
+				if(latLngStart != null && latLngEnd !=null){
+					drawLine(latLngStart,latLngEnd);
+				}	
+			}
+
+			function clearLines(){
+				  for (var i = 0; i < lines.length; i++) {
+				    lines[i].setMap(null);
+				  }
+				lines =[]
+			}
+
+			function drawLine(){
+				clearLines()
+
+				var flightPlanCoordinates = [
+					{lat: latLngStart.lat(), lng: latLngStart.lng()},
+					{lat: latLngEnd.lat(), lng: latLngEnd.lng()}
+				];
+
+				var flightPath = new google.maps.Polyline({
+					path: flightPlanCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				});
+ 
+				lines.push(flightPath)
+				flightPath.setMap(map);
+			}
+
+			function reset() {
+				clearMarkers();
+				clearLines();
+				latLngEnd = null;
+				latLngStart = null;					
+				document.getElementById("error-txt").innerHTML = "";
+				document.getElementById("starting-txt").innerHTML = "";
+				document.getElementById("end-txt").innerHTML = "";
+			}
+
+			function save(){
+				if(latLngStart == null && latLngEnd == null){
+					document.getElementById("error-txt").innerHTML = "Select at least on point";
+				}else{
+					document.getElementById("error-txt").innerHTML = "";
+					document.getElementById("starting-txt").innerHTML = "";
+					document.getElementById("end-txt").innerHTML = "";
+				}
+				if(latLngStart!=null){
+					var starting_latitude = latLngStart.lat();
+					var starting_longitude = latLngStart.lng();
+
+					console.log('Starting Point ' )
+					console.log('------------------------------------');
+					console.log('Latitude : ' + starting_latitude);
+					console.log('Longitude : ' + starting_longitude);
+					console.log();
+
+					document.getElementById("starting-txt").innerHTML = "Starting Point {" + starting_latitude + " , " + starting_longitude + " }";
+				}
+
+				if(latLngEnd!=null){
+					var end_latitude = latLngEnd.lat();
+					var end_longitude = latLngEnd.lng();
+
+					console.log('End Point ' );
+					console.log('------------------------------------');
+					console.log('Latitude : ' + end_latitude);
+					console.log('Longitude : ' + end_longitude);
+
+					document.getElementById("end-txt").innerHTML = "End Point {" + end_latitude + " , " + end_longitude + " }";
+				}
+			}
+
+		</script>
+
+		<script src=https://maps.googleapis.com/maps/api/js?key=YOUR_OWN_KEY&signed_in=true&callback=initMap
+				async defer>
+		</script>
+	</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Display line between two points</title>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<style>
+			html, body {
+				height: 75%;
+				margin: 0;
+				padding: 0;
+			}
+			#map {
+				height: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="info" style="text-align: center">
+			<h1>Displaying line between 2 points</h1>
+		</div>
+		<div id="map"></div>
+
+		<script>
+			var latLngEnd = null;
+			var latLngStart = null;
+			var map;
+			var markers = [];
+
+			function loadMarkers() {
+				latLngStart = {
+					lat: 46.52863469527169,
+					lng: 0.087890625
+				};
+				latLngEnd = {
+					lat: 47.30903424774781,
+					lng: 4.8779296875
+				};
+			}
+
+			function initMap() {
+				map = new google.maps.Map(document.getElementById('map'), {
+					zoom: 5,
+					center: {lat: 46.2276, lng: 2.2137}
+				});
+				loadMarkers();
+				console.log(latLngStart);
+				console.log(latLngEnd);
+				placeMarkerAndPanTo(latLngStart, latLngEnd, map);
+			}
+
+			function placeMarkerAndPanTo(latLngStart, latLngEnd, map) {
+
+				var markerEnd = new google.maps.Marker({
+					position: latLngEnd,
+					map: map,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+				});	
+				markers.push(markerEnd);
+
+				var markerStart = new google.maps.Marker({
+					position: latLngStart,
+					map: map,
+					icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+				});	
+				markers.push(markerStart);
+
+				drawLine(latLngStart,latLngEnd);
+			}
+
+			function drawLine(){
+
+				var flightPlanCoordinates = [
+					{lat: latLngStart.lat, lng: latLngStart.lng},
+					{lat: latLngEnd.lat, lng: latLngEnd.lng}
+				];
+
+				var flightPath = new google.maps.Polyline({
+					path: flightPlanCoordinates,
+					geodesic: true,
+					strokeColor: '#FF0000',
+					strokeOpacity: 1.0,
+					strokeWeight: 2
+				});
+				flightPath.setMap(map);
+			}
+		</script>
+
+		<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_OWN_KEY&signed_in=true&callback=initMap"
+				async defer>
+		</script>
+	</body>
+</html>
