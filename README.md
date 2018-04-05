@@ -23,3 +23,17 @@ Check code [here](src/put-multiple-marker.html)
 </p>
 
 Check code [here](src/display-multiple-markers.html)
+
+### Drawing line between 2 points in a map
+<p align="center">
+  <img src="screenshots/drawing_line_between_2_points.gif">
+</p>
+
+Check code [here](src/draw-line-between-2-points.html)
+
+### Displaying line between 2 markers in a map
+<p align="center">
+  <img src="screenshots/displaying_line_between_2_markers.JPG">
+</p>
+
+Check code [here](src/display-line-between-2-points.html)]
